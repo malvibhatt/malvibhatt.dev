@@ -1,13 +1,18 @@
-
-import './App.css'
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Hero from './sections/Hero';
 
 function App() {
-
   return (
-    <>
-      <div>My Portfolio</div>
-    </>
-  )
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main className="flex-1">
+        <Hero />
+        {/* About, Features, Projects, Contact sections will be added here */}
+      </main>
+      <Footer />
+    </div>
+  );
 }
 
-export default App
+export default App;
