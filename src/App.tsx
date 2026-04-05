@@ -1,6 +1,8 @@
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Hero from './sections/Hero';
+import About from './sections/About';
+import Features from './sections/Features';
 
 function App() {
   return (
@@ -8,7 +10,9 @@ function App() {
       <Navbar />
       <main className="flex-1">
         <Hero />
-        {/* About, Features, Projects, Contact sections will be added here */}
+        <About />
+        <Features />
+        {/* Projects, Contact sections will be added here */}
       </main>
       <Footer />
     </div>
