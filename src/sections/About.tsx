@@ -47,13 +47,13 @@ function About() {
           </h2>
           <p className={styles.bio}>
             I'm a Software Engineer based in Ottawa, Ontario, with deep expertise in
-            frontend architecture. My core focus has been the Angular ecosystem — building
+            frontend architecture. My core focus has been the Angular ecosystem- building
             design systems, reusable component libraries, and micro frontend platforms that
             scale across large teams.
           </p>
           <p className={styles.bio}>
-            I've worked across industries including EV fleet management at Siemens,
-            restaurant tech, pharmaceutical monitoring, and full-stack MEAN applications.
+            I've delivered across sectors — Mobility & EV infrastructure at Siemens,
+            Food & Hospitality tech, Industrial IoT, HealthTech, and full-stack SaaS platforms.
             I care deeply about code quality, performance, and building products that are
             both powerful and maintainable.
           </p>

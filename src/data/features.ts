@@ -1,3 +1,6 @@
+import siteMapOverview from '../assets/features/overview-site-map.png';
+import siteMapDetailed from '../assets/features/detailed-site-map.png';
+
 export type Challenge = {
   title: string;
   description: string;
@@ -13,15 +16,16 @@ export type Feature = {
   challenges: Challenge[];
   solution: string;
   solutionPoints: string[];
+  screenshots?: string[];         // optional — add when available
+  screenshotDisclaimer?: string;  // shown below screenshots when set
   impactUrl?: string;
   impactLabel?: string;
-  screenshotPlaceholder: string; // replace with actual image path later
 };
 
 export const features: Feature[] = [
   {
-    id: 'depot-map',
-    title: 'Real-Time Depot Map',
+    id: 'site-map',
+    title: 'Real-Time Site Map',
     project: 'Fleet Management Platform',
     company: 'Siemens',
     tech: ['Angular', 'MapTiler', 'GeoJSON', 'QGIS', 'TypeScript', 'WebSockets'],
@@ -46,20 +50,21 @@ export const features: Feature[] = [
       {
         title: 'Library evaluation & GeoJSON authoring',
         description:
-          'Multiple mapping SDKs were evaluated. MapTiler was chosen for pricing, Angular compatibility, and GeoJSON support. QGIS (a desktop GIS tool) was used to author the depot GeoJSON because MapTiler\'s built-in editor had limitations for complex shapes.',
+          'Multiple mapping SDKs were evaluated. MapTiler was chosen for pricing, Angular compatibility, and GeoJSON support. QGIS (a desktop GIS tool) was used to author the site GeoJSON because MapTiler\'s built-in editor had limitations for complex shapes.',
       },
     ],
     solution:
       'Designed a layered map architecture using the MapTiler SDK, where each visual concern is a separate, independently updateable layer. Live data patches the map source directly without re-rendering — keeping the UI smooth and real-time.',
     solutionPoints: [
       'Polygon layers for parking spots, icon layers for chargers & vehicles, point layers for text labels',
-      'A simplified zoom-out layer for depot overview at low zoom levels',
+      'A simplified zoom-out layer for site overview at low zoom levels',
       'Real-time charging progress (state of charge, power values) rendered as live overlays',
       'Click any parking spot → a side panel slides in with full charger & vehicle details',
-      'Animated zone transitions when zooming between different areas of the depot',
+      'Animated zone transitions when zooming between different areas of the site',
     ],
+    screenshots: [siteMapOverview, siteMapDetailed],
+    screenshotDisclaimer: 'Screenshots are recreated locally with dummy data for reference purposes only and do not represent actual production data.',
     impactUrl: 'http://linkedin.com/feed/update/urn:li:ugcPost:7363844747385364480/',
     impactLabel: 'See customer recognition on LinkedIn',
-    screenshotPlaceholder: 'Depot map screenshot coming soon',
   },
 ];

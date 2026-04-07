@@ -3,6 +3,8 @@ import Footer from './components/Footer';
 import Hero from './sections/Hero';
 import About from './sections/About';
 import Features from './sections/Features';
+import Projects from './sections/Projects';
+import Contact from './sections/Contact';
 
 function App() {
   return (
@@ -12,7 +14,8 @@ function App() {
         <Hero />
         <About />
         <Features />
-        {/* Projects, Contact sections will be added here */}
+        <Projects />
+        <Contact />
       </main>
       <Footer />
     </div>

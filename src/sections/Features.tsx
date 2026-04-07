@@ -1,4 +1,52 @@
 import { useState } from 'react';
+
+function ChevronIcon({ direction }: { direction: 'left' | 'right' }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      {direction === 'left'
+        ? <polyline points="15 18 9 12 15 6" />
+        : <polyline points="9 18 15 12 9 6" />}
+    </svg>
+  );
+}
+
+function ScreenshotCarousel({ screenshots, title, disclaimer }: { screenshots: string[]; title: string; disclaimer?: string }) {
+  const [current, setCurrent] = useState(0);
+  const hasMultiple = screenshots.length > 1;
+
+  const prev = () => setCurrent((c) => (c === 0 ? screenshots.length - 1 : c - 1));
+  const next = () => setCurrent((c) => (c === screenshots.length - 1 ? 0 : c + 1));
+
+  return (
+    <div className="mx-8 mb-4">
+      <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-slate-900">
+        <img
+          src={screenshots[current]}
+          alt={`${title} screenshot ${current + 1}`}
+          className="w-full object-contain max-h-96"
+        />
+        {hasMultiple && (
+          <>
+            <button onClick={prev} className="absolute top-1/2 left-3 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors" aria-label="Previous">
+              <ChevronIcon direction="left" />
+            </button>
+            <button onClick={next} className="absolute top-1/2 right-3 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors" aria-label="Next">
+              <ChevronIcon direction="right" />
+            </button>
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+              {screenshots.map((_, i) => (
+                <button key={i} onClick={() => setCurrent(i)} className={`w-1.5 h-1.5 rounded-full transition-colors ${i === current ? 'bg-white' : 'bg-white/40'}`} />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+      {disclaimer && (
+        <p className="text-slate-600 text-xs italic mt-3 text-center">{disclaimer}</p>
+      )}
+    </div>
+  );
+}
 import { features } from '../data/features';
 import type { Feature } from '../data/features';
 
@@ -53,8 +101,6 @@ const styles = {
   challengeDesc: "text-slate-500 text-sm leading-relaxed",
   solutionPoint: "flex items-start gap-2 text-slate-400 text-sm leading-relaxed mb-3 last:mb-0",
   solutionDot: "w-1.5 h-1.5 rounded-full bg-[#2dd4bf] flex-shrink-0 mt-1.5",
-  screenshotArea: "mx-8 mb-8 rounded-2xl bg-slate-800/50 border border-white/10 h-64 flex items-center justify-center",
-  screenshotText: "text-slate-600 text-sm italic",
   impactBar: "mx-8 mb-8 flex items-center gap-3 bg-[#2dd4bf]/5 border border-[#2dd4bf]/20 rounded-2xl px-6 py-4",
   impactLabel: "text-[#2dd4bf] text-sm font-semibold",
 };
@@ -75,7 +121,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
       {/* Header */}
       <div className={styles.cardHeader}>
         <div>
-          <p className="text-slate-500 text-xs uppercase tracking-widest mb-1">{feature.company} · {feature.project}</p>
+          <p className="text-slate-500 text-xs uppercase tracking-widest mb-1"> {feature.project}</p>
           <h3 className={styles.featureTitle}>{feature.title}</h3>
         </div>
         <span className={styles.projectBadge}>Case Study</span>
@@ -145,10 +191,14 @@ function FeatureCard({ feature }: { feature: Feature }) {
         )}
       </div>
 
-      {/* Screenshot placeholder */}
-      <div className={styles.screenshotArea}>
-        <p className={styles.screenshotText}>📸 {feature.screenshotPlaceholder}</p>
-      </div>
+      {/* Screenshots */}
+      {feature.screenshots && feature.screenshots.length > 0 && (
+        <ScreenshotCarousel
+          screenshots={feature.screenshots}
+          title={feature.title}
+          disclaimer={feature.screenshotDisclaimer}
+        />
+      )}
 
       {/* Customer impact */}
       {feature.impactUrl && (

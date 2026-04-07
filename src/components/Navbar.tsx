@@ -1,4 +1,4 @@
-const navLinks = ['Home', 'About', 'Projects', 'Contact'];
+const navLinks = ['Home', 'About', 'Features', 'Projects', 'Contact'];
 
 const styles = {
   nav: "fixed top-0 left-0 w-full z-50 bg-[#0f172a]/90 backdrop-blur-md border-b border-white/10",
