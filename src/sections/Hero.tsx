@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ResumeModal from '../components/ResumeModal';
+import profilePicture from '../assets/profile-picture.png';
 
 const styles = {
   section: "min-h-screen bg-[#0f172a] flex items-center pt-16 relative overflow-hidden",
@@ -54,9 +55,11 @@ function Hero() {
         {/* Right: Photo */}
         <div className={styles.photoWrapper}>
           <div className={styles.photoRing}>
-            <div className={styles.photoPlaceholder}>
-              Photo coming soon
-            </div>
+            <img
+              src={profilePicture}
+              alt="Malvi Bhatt"
+              className={styles.photoPlaceholder + " object-cover"}
+            />
           </div>
         </div>
       </div>
