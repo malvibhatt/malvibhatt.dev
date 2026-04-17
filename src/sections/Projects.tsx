@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { projects, sectors, sectorMeta } from '../data/projects';
 import type { Project, Sector } from '../data/projects';
 
@@ -47,6 +48,97 @@ const styles = {
   liveLink: "flex items-center gap-1.5 text-xs font-semibold text-[#2dd4bf] hover:text-[#0f9488] transition-colors flex-shrink-0",
 };
 
+function CloseIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+function Lightbox({ screenshots, startIndex, name, onClose }: {
+  screenshots: string[];
+  startIndex: number;
+  name: string;
+  onClose: () => void;
+}) {
+  const [current, setCurrent] = useState(startIndex);
+  const hasMultiple = screenshots.length > 1;
+
+  const prev = useCallback(() => setCurrent((c) => (c === 0 ? screenshots.length - 1 : c - 1)), [screenshots.length]);
+  const next = useCallback(() => setCurrent((c) => (c === screenshots.length - 1 ? 0 : c + 1)), [screenshots.length]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight') next();
+    };
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [onClose, prev, next]);
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors"
+        aria-label="Close"
+      >
+        <CloseIcon />
+      </button>
+
+      <div className="relative flex items-center justify-center max-w-5xl w-full" onClick={(e) => e.stopPropagation()}>
+        {hasMultiple && (
+          <button
+            onClick={prev}
+            className="absolute left-0 -translate-x-12 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors"
+            aria-label="Previous"
+          >
+            <ChevronIcon direction="left" />
+          </button>
+        )}
+
+        <img
+          src={screenshots[current]}
+          alt={`${name} screenshot ${current + 1}`}
+          className="max-h-[85vh] max-w-full object-contain rounded-xl shadow-2xl"
+        />
+
+        {hasMultiple && (
+          <button
+            onClick={next}
+            className="absolute right-0 translate-x-12 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors"
+            aria-label="Next"
+          >
+            <ChevronIcon direction="right" />
+          </button>
+        )}
+      </div>
+
+      {hasMultiple && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+          {screenshots.map((_, i) => (
+            <button
+              key={i}
+              onClick={(e) => { e.stopPropagation(); setCurrent(i); }}
+              className={`w-2 h-2 rounded-full transition-colors ${i === current ? 'bg-white' : 'bg-white/30'}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>,
+    document.body
+  );
+}
+
 function FilterButton({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
     <button
@@ -62,7 +154,11 @@ function FilterButton({ label, active, onClick }: { label: string; active: boole
   );
 }
 
-function ScreenshotCarousel({ screenshots, name }: { screenshots: string[]; name: string }) {
+function ScreenshotCarousel({ screenshots, name, onOpen }: {
+  screenshots: string[];
+  name: string;
+  onOpen: (index: number) => void;
+}) {
   const [current, setCurrent] = useState(0);
   const hasMultiple = screenshots.length > 1;
 
@@ -80,7 +176,8 @@ function ScreenshotCarousel({ screenshots, name }: { screenshots: string[]; name
       <img
         src={screenshots[current]}
         alt={`${name} screenshot ${current + 1}`}
-        className={styles.screenshot}
+        className={`${styles.screenshot} cursor-zoom-in`}
+        onClick={() => onOpen(current)}
       />
 
       {hasMultiple && (
@@ -107,9 +204,29 @@ function ScreenshotCarousel({ screenshots, name }: { screenshots: string[]; name
 
 function ProjectCard({ project }: { project: Project }) {
   const meta = sectorMeta[project.sector];
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
   return (
     <div className={styles.card}>
-      <ScreenshotCarousel screenshots={project.screenshots} name={project.name} />
+      {project.screenshots && project.screenshots.length > 0 ? (
+        <>
+          <ScreenshotCarousel
+            screenshots={project.screenshots}
+            name={project.name}
+            onOpen={(i) => setLightboxIndex(i)}
+          />
+          {lightboxIndex !== null && (
+            <Lightbox
+              screenshots={project.screenshots}
+              startIndex={lightboxIndex}
+              name={project.name}
+              onClose={() => setLightboxIndex(null)}
+            />
+          )}
+        </>
+      ) : (
+        <div className="w-full h-48 bg-slate-100 flex items-center justify-center text-slate-400 text-sm">Screenshots coming soon</div>
+      )}
 
       <div className={styles.cardBody}>
         <div className={`${styles.sectorBadge} ${meta.bg} ${meta.color} ${meta.border}`}>
@@ -150,7 +267,7 @@ function Projects() {
         <p className={styles.label}>Projects</p>
         <h2 className={styles.heading}>Work across industries</h2>
         <p className={styles.subheading}>
-          From restaurant tech to IoT and fleet management — a diverse portfolio built across sectors, stacks, and scales.
+          A diverse portfolio spanning restaurant tech, IoT, and fleet management, built across different sectors, stacks, and scales.
         </p>
 
         {/* Sector filters */}

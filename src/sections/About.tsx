@@ -52,7 +52,7 @@ function About() {
             scale across large teams.
           </p>
           <p className={styles.bio}>
-            I've delivered across sectors — Mobility & EV infrastructure at Siemens,
+            I've delivered across sectors: Mobility & EV infrastructure at Siemens,
             Food & Hospitality tech, Industrial IoT, HealthTech, and full-stack SaaS platforms.
             I care deeply about code quality, performance, and building products that are
             both powerful and maintainable.

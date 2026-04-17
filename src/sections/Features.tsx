@@ -228,7 +228,7 @@ function Features() {
         <p className={styles.label}>Feature Highlights</p>
         <h2 className={styles.heading}>Problems solved. Impact delivered.</h2>
         <p className={styles.subheading}>
-          A look behind the scenes — the real challenges, the technical decisions, and how they translated into better products for users.
+          A look behind the scenes: the real challenges, the technical decisions, and how they translated into better products for users.
         </p>
 
         {features.map((feature) => (

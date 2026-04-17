@@ -25,7 +25,7 @@ function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
         {/* Header */}
         <div className={styles.header}>
           <h2 className={styles.title}>
-            Resume — <span className="text-[#2dd4bf]">Malvi Bhatt</span>
+            <span className="text-[#2dd4bf]">Malvi Bhatt</span> · Resume
           </h2>
           <div className="flex items-center gap-3">
             <a href={resumePdf} download="Malvi Bhatt.pdf" className={styles.downloadBtn}>

@@ -30,7 +30,7 @@ export const features: Feature[] = [
     company: 'Siemens',
     tech: ['Angular', 'MapTiler', 'GeoJSON', 'QGIS', 'TypeScript', 'WebSockets'],
     problem:
-      'Fleet operators had no single view of their depot\'s charging status. Critical data — which chargers were in use, faulted, or available; what state of charge each vehicle was at; which vehicle was connected to which charger in which parking spot — was scattered across multiple systems. Operators had to manually cross-reference data from different screens, making it slow and error-prone to respond to charging issues in real time.',
+      'Fleet operators had no single view of their depot\'s charging status. Critical data was scattered across multiple systems: which chargers were in use, faulted, or available; what state of charge each vehicle was at; which vehicle was connected to which charger in which parking spot. Operators had to manually cross-reference data from different screens, making it slow and error-prone to respond to charging issues in real time.',
     challenges: [
       {
         title: 'Custom map layers, not just markers',
@@ -40,12 +40,12 @@ export const features: Feature[] = [
       {
         title: 'Scaling & rotation on zoom',
         description:
-          'Every entity had to scale correctly as users zoomed in/out, and parking spots weren\'t always aligned horizontally — they required arbitrary rotation angles to match the real-world depot layout.',
+          'Every entity had to scale correctly as users zoomed in/out, and parking spots weren\'t always aligned horizontally. They required arbitrary rotation angles to match the real-world depot layout.',
       },
       {
         title: 'Real-time style updates without re-rendering',
         description:
-          'Charger status, vehicle state of charge, and power values update live via WebSockets. The map source had to be patched in place — a full re-render would have caused visible flicker and performance issues.',
+          'Charger status, vehicle state of charge, and power values update live via WebSockets. The map source had to be patched in place: a full re-render would have caused visible flicker and performance issues.',
       },
       {
         title: 'Library evaluation & GeoJSON authoring',
@@ -54,7 +54,7 @@ export const features: Feature[] = [
       },
     ],
     solution:
-      'Designed a layered map architecture using the MapTiler SDK, where each visual concern is a separate, independently updateable layer. Live data patches the map source directly without re-rendering — keeping the UI smooth and real-time.',
+      'Designed a layered map architecture using the MapTiler SDK, where each visual concern is a separate, independently updateable layer. Live data patches the map source directly without re-rendering, keeping the UI smooth and real-time.',
     solutionPoints: [
       'Polygon layers for parking spots, icon layers for chargers & vehicles, point layers for text labels',
       'A simplified zoom-out layer for site overview at low zoom levels',
