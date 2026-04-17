@@ -222,18 +222,74 @@ function FeatureCard({ feature }: { feature: Feature }) {
 }
 
 function Features() {
+  const totalSlides = features.length + 1;
+  const [current, setCurrent] = useState(0);
+
+  const prev = () => setCurrent((c) => (c === 0 ? totalSlides - 1 : c - 1));
+  const next = () => setCurrent((c) => (c === totalSlides - 1 ? 0 : c + 1));
+
   return (
     <section id="features" className={styles.section}>
       <div className={styles.inner}>
-        <p className={styles.label}>Feature Highlights</p>
-        <h2 className={styles.heading}>Problems solved. Impact delivered.</h2>
-        <p className={styles.subheading}>
-          A look behind the scenes: the real challenges, the technical decisions, and how they translated into better products for users.
-        </p>
 
-        {features.map((feature) => (
-          <FeatureCard key={feature.id} feature={feature} />
+        <div className="flex items-start justify-between flex-wrap gap-4 mb-16">
+          <div>
+            <p className={styles.label}>Feature Highlights</p>
+            <h2 className={`${styles.heading} mb-4`}>Problems solved. Impact delivered.</h2>
+            <p className="text-slate-400 text-lg max-w-2xl">
+              A look behind the scenes: the real challenges, the technical decisions, and how they translated into better products for users.
+            </p>
+          </div>
+          <div className="flex items-center gap-3 pt-2">
+            <span className="text-slate-500 text-sm tabular-nums">{current + 1} / {totalSlides}</span>
+            <button
+              onClick={prev}
+              className="w-9 h-9 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-colors"
+              aria-label="Previous feature"
+            >
+              <ChevronIcon direction="left" />
+            </button>
+            <button
+              onClick={next}
+              className="w-9 h-9 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-colors"
+              aria-label="Next feature"
+            >
+              <ChevronIcon direction="right" />
+            </button>
+          </div>
+        </div>
+
+        {features.map((feature, i) => (
+          <div key={feature.id} className={current === i ? 'block' : 'hidden'}>
+            <FeatureCard feature={feature} />
+          </div>
         ))}
+
+        {current === features.length && (
+          <div className="rounded-3xl border-2 border-dashed border-white/10 px-10 py-24 flex flex-col items-center justify-center text-center">
+            <p className="text-slate-500 text-xs uppercase tracking-widest mb-6">Coming Next</p>
+            <div className="flex flex-wrap gap-3 justify-center mb-6">
+              {['Micro Frontend Architecture', 'RBAC', 'i18n Multi-Language Support'].map((label) => (
+                <span key={label} className="text-sm font-medium px-4 py-2 rounded-full bg-white/5 text-slate-400 border border-white/10">
+                  {label}
+                </span>
+              ))}
+            </div>
+            <p className="text-slate-500 text-sm">More feature write-ups coming soon</p>
+          </div>
+        )}
+
+        <div className="flex justify-center gap-2 mt-10">
+          {Array.from({ length: totalSlides }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              className={`rounded-full transition-all duration-200 ${i === current ? 'w-6 h-2 bg-[#2dd4bf]' : 'w-2 h-2 bg-white/20 hover:bg-white/40'}`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+
       </div>
     </section>
   );
