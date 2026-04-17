@@ -1,10 +1,6 @@
 import { useState } from 'react';
 
-// TODO: Replace with your Formspree form ID
-// 1. Sign up at formspree.io
-// 2. Create a new form → copy the ID (e.g. "xbjvkpqz")
-// 3. Paste it below
-const FORMSPREE_ID = 'YOUR_FORM_ID';
+const FORMSPREE_ID = 'xzdyrevd';
 
 type FormFields = {
   name: string;
